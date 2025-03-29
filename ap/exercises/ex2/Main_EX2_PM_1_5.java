@@ -53,7 +53,7 @@ public class Main_EX2_PM_1_5 {
             } catch (Exception _) {
             }
             if (array[newX][newY] == '*') {
-                System.out.println("hitting the game wall. watch out:) .");
+                System.out.println("hitting the game wall. watch out:) ");
             } else {
                 array[x][y] = ' ';
                 x = newX;
