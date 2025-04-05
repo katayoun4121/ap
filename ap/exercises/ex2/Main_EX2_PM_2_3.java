@@ -168,9 +168,9 @@ public class Main_EX2_PM_2_3 {
     private static void initializeGround(char[][] ground, int k) {
         for (int i = 0; i < ground.length; i++) {
             for (int j = 0; j < ground[i].length; j++) {
-                if (i == 0 ||i == k + 1|| j == 0 || j == k + 1){
+                if (i == 0 || i == k + 1 || j == 0 || j == k + 1) {
                     ground[i][j] = '*';
-                } else{
+                } else {
                     ground[i][j] = ' ';
                 }
             }
