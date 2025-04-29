@@ -15,7 +15,7 @@ public class Letter {
     public String getText(){
         String lettertext="dear "+to+":\n\n";
         lettertext=lettertext.concat(body);
-        lettertext=lettertext.concat("\nsincerely,\n\n");
+        lettertext=lettertext.concat("\n sincerely ,\n\n");
         lettertext=lettertext.concat(from);
         return lettertext;
     }
