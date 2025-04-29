@@ -25,7 +25,7 @@ public class RegistCash {
     }
     public void printReceipt(){
         String receipt="Receipt";
-        receipt=receipt.concat("-------------\n");
+        receipt=receipt.concat("---------------\n");
         for(double price :soldItems){
             receipt=receipt.concat(String.format("item: %.2f $\n",price));
         }
