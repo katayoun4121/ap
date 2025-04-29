@@ -4,7 +4,7 @@ public class CircuitTester {
     public static void main(String[] args) {
         HallLight circuit= new HallLight();
         System.out.println("testing all switch combinations:");
-        System.out.println("---------------------------------");
+        System.out.println("-----------------------------------");
         testCombination(circuit,false,false,"both down");
         circuit.toggleSwitch1();
         testCombination(circuit,true,false,"first up, second down");
