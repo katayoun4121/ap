@@ -2,7 +2,7 @@ package ap.exercises.ex4;
 
 public class EmployeeTester {
     public static void main(String[] args) {
-        Employee harry=new Employee("hacker,hary",50000);
+        Employee harry=new Employee("Hacker,Hary",50000);
         System.out.println("employee name:"+harry.getName());
         System.out.println("current salary: $"+harry.getSalary());
         System.out.println();
