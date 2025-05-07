@@ -12,6 +12,7 @@ class book{
     }
     public int getPrice(){
         return price;
+
     }
 }
 class pen{
@@ -36,7 +37,7 @@ class pen{
 public class Main {
     public static void main(String[] args){
         ArrayList<book> books=new ArrayList<>();
-        books.add(new book("life",80));
+        books.add(new book("life and goals",80));
         books.add(new book("death",75));
         ArrayList<pen> pens= new ArrayList<>();
         pens.add(new pen("blue",50,"kian"));
