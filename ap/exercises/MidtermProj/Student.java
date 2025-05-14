@@ -7,10 +7,10 @@ public class Student {
     private String major;
     private String password;
     public Student(String fullName,String username,String password,String studentId,String major){
-        this.fullName=fullName;
-        this.username=username;
-        this.password=password;
-        this.studentId=studentId;
+        this.fullName= fullName;
+        this.username= username;
+        this.password= password;
+        this.studentId= studentId;
         this.major=major;
     }
 

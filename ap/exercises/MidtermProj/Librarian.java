@@ -35,7 +35,7 @@ public class Librarian {
         return employeeId;
     }
     public String getFullInfo(){
-        return "Name:"+ getFullName()+"\n"+"EmployeeId:"+
+        return "Name: "+ getFullName()+"\n"+"EmployeeId:"+
                 getEmployeeId();
     }
 

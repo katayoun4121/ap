@@ -30,6 +30,7 @@ public class LibraryManager {
         studentManager.setStudents(dataStorage.loadStudents());
         librarianManager.setLibrarians(dataStorage.loadlibrarians());
         adminManager.setAdmins(dataStorage.loadAdmins());
+        System.out.println("--------------");
     }
     private void saveData(){
         dataStorage.saveStudent(studentManager.getStudents());

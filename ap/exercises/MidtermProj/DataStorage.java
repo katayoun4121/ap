@@ -7,7 +7,7 @@ public class DataStorage {
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("student.dat"))){
             oos.writeObject(students);
         } catch (IOException e) {
-            System.out.println("error in saving");
+            System.out.println("error in saving.");
         }
     }
     public List<Student> loadStudents(){

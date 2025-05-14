@@ -11,7 +11,7 @@ public class AdminManager {
         admins.add(new Admin("ddd","123","mr.amiri"));
     }
     public void showAdminMenu(Scanner scan){
-        System.out.println("\n---manager's menu---");
+        System.out.println("\n---manager's  menu---");
         System.out.println("1.adding librarian");
         System.out.println("your choice:");
         int choice= scan.nextInt();

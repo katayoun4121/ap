@@ -6,8 +6,8 @@ public class Main{
         LibraryManager libraryManager= new LibraryManager();
         Scanner scan= new Scanner(System.in);
         System.out.println("select the user type");
-        System.out.println("1.student");
-        System.out.println("2.librarian");
+        System.out.println("1. student");
+        System.out.println("2. librarian");
         System.out.println("3.library manager");
         System.out.println("your choice:");
         int userType= scan.nextInt();

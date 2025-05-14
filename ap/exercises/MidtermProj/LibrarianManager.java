@@ -62,9 +62,9 @@ public class LibrarianManager {
     }
     private void addBook(Scanner scan){
         System.out.println("\n---add book---");
-        System.out.println("book title");
+        System.out.println("book  title");
         String title= scan.nextLine();
-        System.out.println("author:");
+        System.out.println("author :");
         String author= scan.nextLine();
         System.out.println("book"+title+"added");
     }

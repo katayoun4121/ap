@@ -10,9 +10,9 @@ public class StudentManager {
     }
     public void showStudentMenu(Scanner scan){
         System.out.println("\n---student menu---");
-        System.out.println("1.check in");
-        System.out.println("2.log in");
-        System.out.println("3.search book");
+        System.out.println("1. check in");
+        System.out.println("2. log in");
+        System.out.println("3. search book");
         System.out.println("your choice:");
         int choice= scan.nextInt();
         scan.nextLine();
