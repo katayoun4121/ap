@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class Main{
     public static void main(String[] args) {
         LibraryManager libraryManager= new LibraryManager();
+        libraryManager.start();
         Scanner scan= new Scanner(System.in);
         System.out.println("select the user type");
         System.out.println("1. student");

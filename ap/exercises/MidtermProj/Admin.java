@@ -18,7 +18,7 @@ public class Admin {
         return password;
     }
 
-    public String getFullname() {
+    public String getFullName() {
         return fullname;
     }
 }

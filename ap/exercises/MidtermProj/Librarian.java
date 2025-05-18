@@ -34,13 +34,8 @@ public class Librarian {
     public String getEmployeeId() {
         return employeeId;
     }
-    public String getFullInfo(){
-        return "Name: "+ getFullName()+"\n"+"EmployeeId:"+
-                getEmployeeId();
-    }
 
-    @Override
-    public String toString() {
-        return getFullName()+"("+employeeId+")";
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
     }
 }
