@@ -1,51 +1,31 @@
 package ap.exercises.MidtermProj;
 import java.util.Date;
 public class BookLoan {
-    private String bookId;
-    private String studentId;
-    private String librarianId;
-    private String loanDate;
-    private String returnDate;
+    private Book bookId;
+    private Student studentId;
+    private Librarian librarianId;
+    private Date loanDate;
+    private Date returnDate;
+    private  Date dueDate;
+    private Book borrowedBook;
+    private Librarian returnLib;
     private boolean returned;
-    public BookLoan(String bookId,String studentId,String librarianId,
-                    String loanDate,String returnDate){
+    public BookLoan(Book bookId,Student studentId,Librarian returnLib,Librarian librarianId,
+                    Date loanDate,Date dueDate,Date returnDate){
 this.bookId=bookId;
+this.dueDate=dueDate;
+this.returnLib=returnLib;
 this.studentId=studentId;
 this.librarianId=librarianId;
 this.loanDate=loanDate;
 this.returnDate=returnDate;
 this.returned=false;
     }
-
-    public String getBookId() {
-        return bookId;
-    }
-
-
-    public String getStudentId() {
-        return studentId;
-    }
-    public String getLibrarianId(){
-        return librarianId;
-    }
-
-    public boolean isReturned() {
-        return returned;
-    }
-
-    public String getLoanDate() {
-        return loanDate;
-    }
-
-    public String getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(String returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    public void setReturned(boolean returned) {
-        this.returned = returned;
+    public boolean isOverdue(){
+        Date now=new Date();
+        if (returnDate!=null){
+            return returnDate.after(dueDate);
+        }
+        return now.after(dueDate);
     }
 }

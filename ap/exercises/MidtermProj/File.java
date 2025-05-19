@@ -44,7 +44,7 @@ public class File {
             System.out.println("error in saving.");
         }
     }
-    public List<Librarian> loadLibrarians(){
+    public static List<Librarian> loadLibrarians(){
         List <Librarian> librarians = new ArrayList<>();
         File file= new File("librarians.txt");
         if (!file.exists()){

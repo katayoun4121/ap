@@ -1,5 +1,5 @@
 package ap.exercises.MidtermProj;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +9,12 @@ public class Student {
     private String studentId;
     private String major;
     private String password;
+    private Date joindate;
+
     private List<String> borrowedBooks;
     public Student(String fullName,String username,String password,String studentId,String major){
         this.fullName= fullName;
+        this.joindate=new Date();
         this.username= username;
         this.password= password;
         this.studentId= studentId;
@@ -59,5 +62,10 @@ public class Student {
     }
     public void returnBook(String bookId){
         borrowedBooks.remove(bookId);
+    }
+    @Override
+    public String toString(){
+        return "student{"+"fullname= "+fullName+'\''+"studentid= "+studentId+'\''+"major= "+major+'\''+
+                "joinDate= "+joindate+'}';
     }
 }

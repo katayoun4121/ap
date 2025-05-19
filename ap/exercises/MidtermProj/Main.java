@@ -13,6 +13,5 @@ public class Main{
         System.out.println("your choice:");
         int userType= scan.nextInt();
         scan.nextLine();
-        libraryManager.handleUserType(userType,scan);
     }
 }

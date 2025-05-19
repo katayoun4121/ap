@@ -30,7 +30,7 @@ public class LibrarianManager {
         }
     }
     private void loginLibrarian(Scanner scan){
-        System.out.println("\n---librarian log in---");
+        System.out.println("\n---librarian  log in---");
         System.out.println("username");
         String username= scan.nextLine();
         System.out.println("password");
