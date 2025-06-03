@@ -2,6 +2,7 @@ package ap.exercises.projects;
 
 import ap.exercises.projects.DirectoryTools;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class HtmlFileManager {
     private static int saveCounter=0;
 
     public HtmlFileManager(String saveFileBasePath) {
-//        this.saveFileBasePath = DirectoryTools.createDirectoryWithTimeStamp(saveFileBasePath);
+        this.saveFileBasePath = DirectoryTools.createDirectoryWithTimeStamp(saveFileBasePath);
 
         this.saveFileBasePath = saveFileBasePath;
         DirectoryTools.createDirectory(saveFileBasePath);
