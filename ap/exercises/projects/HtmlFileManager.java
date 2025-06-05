@@ -1,10 +1,7 @@
 package ap.exercises.projects;
 
-import ap.exercises.projects.DirectoryTools;
-
-import java.io.File;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.Optional;
 
 public class HtmlFileManager {
 
@@ -18,7 +15,7 @@ public class HtmlFileManager {
         DirectoryTools.createDirectory(saveFileBasePath);
     }
 
-    public void save(List<String> lines) {
+    public void save(String lines) {
         try {
             String saveHtmlFileAddress = getSaveHtmlFileAddress();
             PrintWriter out = new PrintWriter(saveHtmlFileAddress);
