@@ -1,14 +1,18 @@
 package ap.exercises.ex6;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 import java.util.Properties;
-public class ConfigReader {
-    public static Properties readConfig(String configPath) throws IOException {
-        Properties props = new Properties();
-        if (Files.exists(Paths.get(configPath))) {
-            props.load(Files.newInputStream(Paths.get(configPath)));
+public class Conf {
+    public static final String DOMAIN_ADDRESS = "https://znu.ac.ir";
+    public static final String SAVE_DIRECTORY = "fetched_html";
+    public static final int DOWNLOAD_DELAY_SECONDS = 2;
+    public static final int THREAD_COUNT = loadThreadCount();
+    private static int loadThreadCount() {
+        try {
+            Properties props = ConfigReader.readConfig("config.properties");
+            String threadCountStr = props.getProperty("thread-count", "0");
+            return Integer.parseInt(threadCountStr);
+        } catch (Exception e) {
+            return 0;
         }
-        return props;
     }
 }
