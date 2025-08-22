@@ -19,10 +19,12 @@ public class MenuHandler {
             System.out.println("1. Student Registration");
             System.out.println("2. Student Login");
             System.out.println("3. View Registered Student Count");
-            System.out.println("4. Exit");
+            System.out.println("4. Search Books");
+            System.out.println("5. View All Books");
+            System.out.println("6. Exit");
             System.out.print("Please enter your choice: ");
 
-            int choice = getIntInput(1, 5);
+            int choice = getIntInput(1, 6);
 
             switch (choice) {
                 case 1:
@@ -35,6 +37,12 @@ public class MenuHandler {
                     displayStudentCount();
                     break;
                 case 4:
+                    librarySystem.searchBooks();
+                    break;
+                case 5:
+                    librarySystem.displayAvailableBooks();
+                    break;
+                case 6:
                     System.out.println("Exiting system. Goodbye!");
                     return;
                 default:
@@ -82,7 +90,7 @@ public class MenuHandler {
             System.out.println("Login successful! Welcome, " + currentUser.getName());
             displayLoggedInStudentMenu();
         } else {
-            System.out.println("Invalid username or password. Please try again.");
+            System.out.println("Invalid username or password.");
         }
     }
 
@@ -94,10 +102,11 @@ public class MenuHandler {
             System.out.println("3. Borrow a Book");
             System.out.println("4. Return a Book");
             System.out.println("5. View Available Books");
-            System.out.println("6. Logout");
+            System.out.println("6. Search Books");
+            System.out.println("7. Logout");
             System.out.print("Please enter your choice: ");
 
-            int choice = getIntInput(1, 6);
+            int choice = getIntInput(1, 7);
 
             switch (choice) {
                 case 1:
@@ -117,6 +126,9 @@ public class MenuHandler {
                     librarySystem.displayAvailableBooks();
                     break;
                 case 6:
+                    librarySystem.searchBooks();
+                    break;
+                case 7:
                     currentUser = null;
                     System.out.println("Logged out successfully.");
                     return;
