@@ -19,8 +19,8 @@ public class MenuHandler {
             System.out.println("1. Student Registration");
             System.out.println("2. Student Login");
             System.out.println("3. View Registered Student Count");
-            System.out.println("4. Search Books");
-            System.out.println("5. View All Books");
+            System.out.println("4. Search Books by Title");
+            System.out.println("5. View Available Books");
             System.out.println("6. Exit");
             System.out.print("Please enter your choice: ");
 
@@ -37,7 +37,7 @@ public class MenuHandler {
                     librarySystem.displayStudentCount();
                     break;
                 case 4:
-                    librarySystem.searchBooks();
+                    librarySystem.searchBooksByTitle();
                     break;
                 case 5:
                     librarySystem.displayAvailableBooks();
@@ -85,7 +85,7 @@ public class MenuHandler {
             System.out.println("Login successful! Welcome, " + currentUser.getName());
             displayLoggedInStudentMenu();
         } else {
-            System.out.println("Invalid username or password.");
+            System.out.println("Invalid username or password. Please try again.");
         }
     }
 
@@ -98,7 +98,7 @@ public class MenuHandler {
             System.out.println("4. Return a Book");
             System.out.println("5. View My Borrow History");
             System.out.println("6. View Available Books");
-            System.out.println("7. Search Books");
+            System.out.println("7. Search Books by Title");
             System.out.println("8. Logout");
             System.out.print("Please enter your choice: ");
 
@@ -125,7 +125,7 @@ public class MenuHandler {
                     librarySystem.displayAvailableBooks();
                     break;
                 case 7:
-                    librarySystem.searchBooks();
+                    librarySystem.searchBooksByTitle();
                     break;
                 case 8:
                     currentUser = null;

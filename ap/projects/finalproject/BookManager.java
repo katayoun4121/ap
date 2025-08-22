@@ -30,9 +30,13 @@ public class BookManager {
         saveBooks();
     }
 
-    public List<Book> searchBooks(String title, String author, Integer year) {
+    public List<Book> searchBooksByTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         return books.stream()
-                .filter(book -> book.matchesSearch(title, author, year))
+                .filter(book -> book.matchesTitleSearch(title))
                 .collect(Collectors.toList());
     }
 
@@ -50,7 +54,9 @@ public class BookManager {
             return;
         }
 
-        books.forEach(System.out::println);
+        books.forEach(book -> {
+            System.out.println(book.getBookInfo());
+        });
     }
 
     public void displayAvailableBooks() {
@@ -64,7 +70,21 @@ public class BookManager {
             return;
         }
 
-        availableBooks.forEach(System.out::println);
+        availableBooks.forEach(book -> {
+            System.out.println(book.getBookInfo());
+        });
+    }
+
+    public void displaySearchResults(List<Book> results) {
+        if (results.isEmpty()) {
+            System.out.println("No books found matching your criteria.");
+        } else {
+            System.out.println("\n--- Search Results ---");
+            results.forEach(book -> {
+                System.out.println(book.getBookInfo());
+            });
+            System.out.println("Found " + results.size() + " book(s)");
+        }
     }
 
     public boolean borrowBook(String isbn) {

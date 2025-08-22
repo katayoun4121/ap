@@ -137,32 +137,20 @@ public class LibrarySystem {
         borrows.forEach(System.out::println);
     }
 
-    public void searchBooks() {
+    public void searchBooksByTitle() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\n--- Search Books ---");
+        System.out.println("\n--- Search Books by Title ---");
 
-        System.out.print("Title  ");
+        System.out.print("Enter book title to search: ");
         String title = scanner.nextLine();
 
-        System.out.print("Author ");
-        String author = scanner.nextLine();
-
-        System.out.print("Publication Year  ");
-        int year = scanner.nextInt();
-        scanner.nextLine();
-
-        List<Book> results = bookManager.searchBooks(
-                title.isEmpty() ? null : title,
-                author.isEmpty() ? null : author,
-                year == 0 ? null : year
-        );
-
-        System.out.println("\n--- Search Results ---");
-        if (results.isEmpty()) {
-            System.out.println("No books found matching your criteria.");
-        } else {
-            results.forEach(System.out::println);
+        if (title.isEmpty()) {
+            System.out.println("Please enter a title to search.");
+            return;
         }
+
+        List<Book> results = bookManager.searchBooksByTitle(title);
+        bookManager.displaySearchResults(results);
     }
 
     public void start() {

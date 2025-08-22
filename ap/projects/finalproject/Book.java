@@ -26,6 +26,13 @@ public class Book implements Serializable {
 
     public void setAvailable(boolean available) { isAvailable = available; }
 
+    public String getBookInfo() {
+        return "Title: " + title +
+                " | Author: " + author +
+                " | Year: " + publicationYear +
+                " | ISBN: " + isbn;
+    }
+
     @Override
     public String toString() {
         String status = isAvailable ? "Available" : "Borrowed";
@@ -36,16 +43,10 @@ public class Book implements Serializable {
                 " | Status: " + status;
     }
 
-    public boolean matchesSearch(String title, String author, Integer year) {
-        boolean titleMatch = title == null || title.isEmpty() ||
-                this.title.toLowerCase().contains(title.toLowerCase());
-
-        boolean authorMatch = author == null || author.isEmpty() ||
-                this.author.toLowerCase().contains(author.toLowerCase());
-
-        boolean yearMatch = year == null || year == 0 ||
-                this.publicationYear == year;
-
-        return titleMatch && authorMatch && yearMatch;
+    public boolean matchesTitleSearch(String searchTitle) {
+        if (searchTitle == null || searchTitle.isEmpty()) {
+            return false;
+        }
+        return this.title.toLowerCase().contains(searchTitle.toLowerCase());
     }
 }
