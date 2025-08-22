@@ -1,6 +1,5 @@
 package ap.projects.finalproject;
 
-import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,32 @@ public class BorrowManager {
         if (this.borrowRecords == null) {
             this.borrowRecords = new ArrayList<>();
         }
+    }
+
+    public List<BorrowRecord> getAllBorrows() {
+        return new ArrayList<>(borrowRecords);
+    }
+
+    public int getTotalBorrowsCount() {
+        return borrowRecords.size();
+    }
+
+    public int getActiveBorrowsCount() {
+        return (int) borrowRecords.stream()
+                .filter(record -> !record.isReturned())
+                .count();
+    }
+
+    public int getOverdueBorrowsCount() {
+        return (int) borrowRecords.stream()
+                .filter(BorrowRecord::isOverdue)
+                .count();
+    }
+
+    public int getReturnedBorrowsCount() {
+        return (int) borrowRecords.stream()
+                .filter(BorrowRecord::isReturned)
+                .count();
     }
 
     public boolean borrowBook(String studentUsername, String bookIsbn, int borrowDays) {
@@ -57,6 +82,12 @@ public class BorrowManager {
         return borrowRecords.stream()
                 .filter(record -> record.getStudentUsername().equals(studentUsername) &&
                         !record.isReturned())
+                .collect(Collectors.toList());
+    }
+
+    public List<BorrowRecord> getActiveBorrows() {
+        return borrowRecords.stream()
+                .filter(record -> !record.isReturned())
                 .collect(Collectors.toList());
     }
 

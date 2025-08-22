@@ -18,7 +18,7 @@ public class MenuHandler {
             System.out.println("\n=== University Library Management System ===");
             System.out.println("1. Student Registration");
             System.out.println("2. Student Login");
-            System.out.println("3. View Registered Student Count");
+            System.out.println("3. View Statistics");
             System.out.println("4. Search Books by Title");
             System.out.println("5. View Available Books");
             System.out.println("6. Exit");
@@ -34,7 +34,7 @@ public class MenuHandler {
                     handleStudentLogin();
                     break;
                 case 3:
-                    librarySystem.displayStudentCount();
+                    librarySystem.displayStatistics();
                     break;
                 case 4:
                     librarySystem.searchBooksByTitle();
@@ -99,10 +99,11 @@ public class MenuHandler {
             System.out.println("5. View My Borrow History");
             System.out.println("6. View Available Books");
             System.out.println("7. Search Books by Title");
-            System.out.println("8. Logout");
+            System.out.println("8. View Statistics");
+            System.out.println("9. Logout");
             System.out.print("Please enter your choice: ");
 
-            int choice = getIntInput(1, 8);
+            int choice = getIntInput(1, 9);
 
             switch (choice) {
                 case 1:
@@ -128,11 +129,14 @@ public class MenuHandler {
                     librarySystem.searchBooksByTitle();
                     break;
                 case 8:
+                    librarySystem.displayStatistics();
+                    break;
+                case 9:
                     currentUser = null;
                     System.out.println("Logged out successfully.");
                     return;
                 default:
-                    System.out.println("Invalid option! Please try again.");
+                    System.out.println("Invalid option! ");
             }
         }
     }

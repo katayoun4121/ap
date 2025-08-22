@@ -9,12 +9,14 @@ public class LibrarySystem {
     private StudentManager studentManager;
     private BookManager bookManager;
     private BorrowManager borrowManager;
+    private StatisticsManager statisticsManager;
     private MenuHandler menuHandler;
 
     public LibrarySystem() {
         this.studentManager = new StudentManager();
         this.bookManager = new BookManager();
         this.borrowManager = new BorrowManager();
+        this.statisticsManager = new StatisticsManager(studentManager, bookManager, borrowManager);
         this.menuHandler = new MenuHandler(this);
     }
 
@@ -26,6 +28,10 @@ public class LibrarySystem {
         int count = getStudentCount();
         System.out.println("\n--- Registered Students Count ---");
         System.out.println("Total registered students: " + count);
+    }
+
+    public void displayStatistics() {
+        statisticsManager.displayStatistics();
     }
 
     public void registerStudent(String name, String studentId, String username, String password) {
@@ -163,4 +169,5 @@ public class LibrarySystem {
     }
 
     public BorrowManager getBorrowManager() { return borrowManager; }
+    public StatisticsManager getStatisticsManager() { return statisticsManager; }
 }

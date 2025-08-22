@@ -22,7 +22,28 @@ public class BookManager {
         books.add(new Book("Data Structures", "Jack Johnson", 2019, "2222"));
         books.add(new Book("Algorithms", "Robert smith", 2018, "3333"));
         books.add(new Book("Database Systems", " Garcia Morone", 2021, "4444"));
+        books.add(new Book("Algorythm","Mark Tin",2011,"5555"));
         saveBooks();
+    }
+
+    public List<Book> getAllBooks() {
+        return new ArrayList<>(books);
+    }
+
+    public int getTotalBooksCount() {
+        return books.size();
+    }
+
+    public int getAvailableBooksCount() {
+        return (int) books.stream()
+                .filter(Book::isAvailable)
+                .count();
+    }
+
+    public int getBorrowedBooksCount() {
+        return (int) books.stream()
+                .filter(book -> !book.isAvailable())
+                .count();
     }
 
     public void addBook(Book book) {
