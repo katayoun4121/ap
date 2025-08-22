@@ -22,6 +22,12 @@ public class LibrarySystem {
         return this.studentManager.getStudentCount();
     }
 
+    public void displayStudentCount() {
+        int count = getStudentCount();
+        System.out.println("\n--- Registered Students Count ---");
+        System.out.println("Total registered students: " + count);
+    }
+
     public void registerStudent(String name, String studentId, String username, String password) {
         studentManager.registerStudent(name, studentId, username, password);
     }
@@ -135,13 +141,13 @@ public class LibrarySystem {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n--- Search Books ---");
 
-        System.out.print("Title (press Enter to skip): ");
+        System.out.print("Title  ");
         String title = scanner.nextLine();
 
-        System.out.print("Author (press Enter to skip): ");
+        System.out.print("Author ");
         String author = scanner.nextLine();
 
-        System.out.print("Publication Year (0 to skip): ");
+        System.out.print("Publication Year  ");
         int year = scanner.nextInt();
         scanner.nextLine();
 
@@ -153,7 +159,7 @@ public class LibrarySystem {
 
         System.out.println("\n--- Search Results ---");
         if (results.isEmpty()) {
-            System.out.println("No books found.");
+            System.out.println("No books found matching your criteria.");
         } else {
             results.forEach(System.out::println);
         }

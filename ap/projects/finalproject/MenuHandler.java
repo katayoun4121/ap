@@ -34,7 +34,7 @@ public class MenuHandler {
                     handleStudentLogin();
                     break;
                 case 3:
-                    displayStudentCount();
+                    librarySystem.displayStudentCount();
                     break;
                 case 4:
                     librarySystem.searchBooks();
@@ -50,11 +50,6 @@ public class MenuHandler {
             }
             System.out.println("___________________________");
         }
-    }
-
-    private void displayStudentCount() {
-        int studentCount = librarySystem.getStudentCount();
-        System.out.println("\nTotal registered students: " + studentCount);
     }
 
     private void handleStudentRegistration() {

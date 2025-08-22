@@ -18,14 +18,12 @@ public class Book implements Serializable {
         this.isAvailable = true;
     }
 
-    // Getter methods
     public String getTitle() { return title; }
     public String getAuthor() { return author; }
     public int getPublicationYear() { return publicationYear; }
     public String getIsbn() { return isbn; }
     public boolean isAvailable() { return isAvailable; }
 
-    // Setter methods
     public void setAvailable(boolean available) { isAvailable = available; }
 
     @Override

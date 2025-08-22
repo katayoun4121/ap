@@ -11,7 +11,7 @@ public class StudentFileManager {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
             oos.writeObject(students);
         } catch (IOException e) {
-            System.out.println("Error saving students data: ");
+            System.out.println("Error saving students data: " + e.getMessage());
         }
     }
 
@@ -31,7 +31,7 @@ public class StudentFileManager {
                 return new ArrayList<>();
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error loading students data: ");
+            System.out.println("Error loading students data: " + e.getMessage());
             return new ArrayList<>();
         }
     }

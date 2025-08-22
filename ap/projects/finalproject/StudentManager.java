@@ -10,6 +10,7 @@ public class StudentManager {
     public StudentManager() {
         this.fileManager = new StudentFileManager();
         this.students = fileManager.loadStudents();
+
         if (this.students == null) {
             this.students = new ArrayList<>();
         }
