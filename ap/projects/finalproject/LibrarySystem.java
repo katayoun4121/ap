@@ -1,16 +1,20 @@
 package ap.projects.finalproject;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
 public class LibrarySystem {
     private StudentManager studentManager;
     private BookManager bookManager;
+    private BorrowManager borrowManager;
     private MenuHandler menuHandler;
 
     public LibrarySystem() {
         this.studentManager = new StudentManager();
         this.bookManager = new BookManager();
+        this.borrowManager = new BorrowManager();
         this.menuHandler = new MenuHandler(this);
     }
 
@@ -54,10 +58,36 @@ public class LibrarySystem {
         System.out.print("Enter ISBN of the book you want to borrow: ");
         String isbn = scanner.nextLine();
 
+        Book book = bookManager.findBookByIsbn(isbn);
+        if (book == null) {
+            System.out.println("Invalid ISBN.");
+            return;
+        }
+
+        if (!book.isAvailable()) {
+            System.out.println("Book is not available.");
+            return;
+        }
+
+        System.out.print("Enter number of days to borrow (1-30): ");
+        int borrowDays = scanner.nextInt();
+        scanner.nextLine();
+
+        if (borrowDays < 1 || borrowDays > 30) {
+            System.out.println("Invalid number of days. Must be between 1 and 30.");
+            return;
+        }
+
         if (bookManager.borrowBook(isbn)) {
+            borrowManager.borrowBook(student.getUsername(), isbn, borrowDays);
+
+            LocalDate dueDate = LocalDate.now().plusDays(borrowDays);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
             System.out.println("Book borrowed successfully!");
+            System.out.println("Due date: " + dueDate.format(formatter));
         } else {
-            System.out.println("Book not available or invalid ISBN.");
+            System.out.println("Failed to borrow book.");
         }
     }
 
@@ -65,13 +95,23 @@ public class LibrarySystem {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n--- Return a Book ---");
 
+        List<BorrowRecord> activeBorrows = borrowManager.getActiveBorrows(student.getUsername());
+        if (activeBorrows.isEmpty()) {
+            System.out.println("You have no active borrows.");
+            return;
+        }
+
+        System.out.println("\nYour Active Borrows:");
+        activeBorrows.forEach(System.out::println);
+
         System.out.print("Enter ISBN of the book you want to return: ");
         String isbn = scanner.nextLine();
 
-        if (bookManager.returnBook(isbn)) {
+        if (borrowManager.returnBook(student.getUsername(), isbn)) {
+            bookManager.returnBook(isbn);
             System.out.println("Book returned successfully!");
         } else {
-            System.out.println("Invalid ISBN or book was not borrowed.");
+            System.out.println("Invalid ISBN or you don't have this book borrowed.");
         }
     }
 
@@ -79,17 +119,29 @@ public class LibrarySystem {
         bookManager.displayAvailableBooks();
     }
 
+    public void viewMyBorrows(Student student) {
+        System.out.println("\n--- My Borrow History ---");
+        List<BorrowRecord> borrows = borrowManager.getStudentBorrows(student.getUsername());
+
+        if (borrows.isEmpty()) {
+            System.out.println("You have no borrow history.");
+            return;
+        }
+
+        borrows.forEach(System.out::println);
+    }
+
     public void searchBooks() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n--- Search Books ---");
 
-        System.out.print("Title: ");
+        System.out.print("Title (press Enter to skip): ");
         String title = scanner.nextLine();
 
-        System.out.print("Author:  ");
+        System.out.print("Author (press Enter to skip): ");
         String author = scanner.nextLine();
 
-        System.out.print("Publication year:  ");
+        System.out.print("Publication Year (0 to skip): ");
         int year = scanner.nextInt();
         scanner.nextLine();
 
@@ -115,4 +167,6 @@ public class LibrarySystem {
         LibrarySystem system = new LibrarySystem();
         system.start();
     }
+
+    public BorrowManager getBorrowManager() { return borrowManager; }
 }

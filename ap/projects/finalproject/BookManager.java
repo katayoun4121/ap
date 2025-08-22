@@ -1,6 +1,5 @@
 package ap.projects.finalproject;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,10 +18,11 @@ public class BookManager {
     }
 
     private void initializeSampleBooks() {
-        books.add(new Book("Java Programming", "Brad Pitt", 2020, "1111"));
-        books.add(new Book("Data Structures", "Jack Johnson", 2019, "2222"));
-        books.add(new Book("Algorithms", "Robert smith", 2018, "3333"));
-        books.add(new Book("Database Systems", " Garcia Morone ", 2021, "4444"));
+        books.add(new Book("Java Programming", "John Smith", 2020, "978-0134685991"));
+        books.add(new Book("Data Structures", "Alice Johnson", 2019, "978-0262033848"));
+        books.add(new Book("Algorithms", "Robert Brown", 2018, "978-0321573513"));
+        books.add(new Book("Database Systems", "Maria Garcia", 2021, "978-0133970777"));
+        books.add(new Book("Web Development", "David Wilson", 2022, "978-1492057092"));
         saveBooks();
     }
 
@@ -51,9 +51,7 @@ public class BookManager {
             return;
         }
 
-        books.forEach(book -> {
-            System.out.println(book);
-        });
+        books.forEach(System.out::println);
     }
 
     public void displayAvailableBooks() {
