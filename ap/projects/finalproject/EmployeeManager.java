@@ -42,6 +42,23 @@ public class EmployeeManager {
                 .orElse(null);
     }
 
+    public boolean changePassword(String username, String currentPassword, String newPassword) {
+        Employee employee = findEmployeeByUsername(username);
+        if (employee != null && employee.getPassword().equals(currentPassword)) {
+            employee.setPassword(newPassword);
+            saveEmployees();
+            return true;
+        }
+        return false;
+    }
+
+    private Employee findEmployeeByUsername(String username) {
+        return employees.stream()
+                .filter(e -> e.getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+    }
+
     private boolean isUsernameTaken(String username) {
         return employees.stream().anyMatch(e -> e.getUsername().equals(username));
     }

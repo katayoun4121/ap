@@ -62,6 +62,11 @@ public class LibrarySystem {
         return employeeManager.authenticateEmployee(username, password);
     }
 
+    // اضافه کردن متد تغییر رمز عبور کارمند
+    public boolean changeEmployeePassword(String username, String currentPassword, String newPassword) {
+        return employeeManager.changePassword(username, currentPassword, newPassword);
+    }
+
     public void registerEmployee(String name, String employeeId, String username, String password, String role) {
         if (currentEmployee != null && currentEmployee.isManager()) {
             employeeManager.registerEmployee(name, employeeId, username, password, role);
