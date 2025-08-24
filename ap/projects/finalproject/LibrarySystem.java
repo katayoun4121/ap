@@ -49,6 +49,31 @@ public class LibrarySystem {
         statisticsManager.displayStatistics();
     }
 
+    public void searchBooksAdvanced() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can use advanced search.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        bookManager.searchBooksFromInput(scanner);
+    }
+
+    public void editBook() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can edit books.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n--- Edit Book Information ---");
+
+        System.out.print("Enter ISBN of the book to edit: ");
+        String isbn = scanner.nextLine();
+
+        bookManager.editBookFromInput(scanner, isbn);
+    }
+
     public void addNewBook() {
         if (currentEmployee == null) {
             System.out.println("Only employees can add books.");

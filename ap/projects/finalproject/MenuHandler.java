@@ -150,25 +150,27 @@ public class MenuHandler {
             System.out.println("\n=== Employee Dashboard ===");
             System.out.println("1. View Statistics");
             System.out.println("2. Search Books by Title");
-            System.out.println("3. View Available Books");
-            System.out.println("4. View All Books");
-            System.out.println("5. Add New Book");
-            System.out.println("6. Change Password");
+            System.out.println("3. Advanced Book Search");
+            System.out.println("4. View Available Books");
+            System.out.println("5. View All Books");
+            System.out.println("6. Add New Book");
+            System.out.println("7. Edit Book Information");
+            System.out.println("8. Change Password");
 
             if (currentEmployee.isManager()) {
-                System.out.println("7. Register New Employee");
-                System.out.println("8. View All Employees");
-                System.out.println("9. View All Students");
-                System.out.println("10. Logout");
+                System.out.println("9. Register New Employee");
+                System.out.println("10. View All Employees");
+                System.out.println("11. View All Students");
+                System.out.println("12. Logout");
                 System.out.print("Please enter your choice: ");
 
-                int choice = getIntInput(1, 10);
+                int choice = getIntInput(1, 12);
                 handleManagerChoice(choice);
             } else {
-                System.out.println("7. Logout");
+                System.out.println("9. Logout");
                 System.out.print("Please enter your choice: ");
 
-                int choice = getIntInput(1, 7);
+                int choice = getIntInput(1, 9);
                 handleStaffChoice(choice);
             }
         }
@@ -183,27 +185,33 @@ public class MenuHandler {
                 librarySystem.searchBooksByTitle();
                 break;
             case 3:
-                librarySystem.displayAvailableBooks();
+                librarySystem.searchBooksAdvanced();
                 break;
             case 4:
-                librarySystem.getBookManager().displayAllBooks();
+                librarySystem.displayAvailableBooks();
                 break;
             case 5:
-                librarySystem.addNewBook();
+                librarySystem.getBookManager().displayAllBooks();
                 break;
             case 6:
-                handleChangePassword();
+                librarySystem.addNewBook();
                 break;
             case 7:
-                handleEmployeeRegistration();
+                librarySystem.editBook();
                 break;
             case 8:
-                librarySystem.displayAllEmployees();
+                handleChangePassword();
                 break;
             case 9:
-                librarySystem.getStudentManager().displayStudents();
+                handleEmployeeRegistration();
                 break;
             case 10:
+                librarySystem.displayAllEmployees();
+                break;
+            case 11:
+                librarySystem.getStudentManager().displayStudents();
+                break;
+            case 12:
                 currentEmployee = null;
                 librarySystem.setCurrentEmployee(null);
                 System.out.println("Logged out successfully.");
@@ -222,18 +230,24 @@ public class MenuHandler {
                 librarySystem.searchBooksByTitle();
                 break;
             case 3:
-                librarySystem.displayAvailableBooks();
+                librarySystem.searchBooksAdvanced();
                 break;
             case 4:
-                librarySystem.getBookManager().displayAllBooks();
+                librarySystem.displayAvailableBooks();
                 break;
             case 5:
-                librarySystem.addNewBook();
+                librarySystem.getBookManager().displayAllBooks();
                 break;
             case 6:
-                handleChangePassword();
+                librarySystem.addNewBook();
                 break;
             case 7:
+                librarySystem.editBook();
+                break;
+            case 8:
+                handleChangePassword();
+                break;
+            case 9:
                 currentEmployee = null;
                 librarySystem.setCurrentEmployee(null);
                 System.out.println("Logged out successfully.");

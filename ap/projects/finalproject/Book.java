@@ -24,6 +24,9 @@ public class Book implements Serializable {
     public String getIsbn() { return isbn; }
     public boolean isAvailable() { return isAvailable; }
 
+    public void setTitle(String title) { this.title = title; }
+    public void setAuthor(String author) { this.author = author; }
+    public void setPublicationYear(int publicationYear) { this.publicationYear = publicationYear; }
     public void setAvailable(boolean available) { isAvailable = available; }
 
     public String getBookInfo() {
@@ -33,8 +36,7 @@ public class Book implements Serializable {
                 " | ISBN: " + isbn;
     }
 
-    @Override
-    public String toString() {
+    public String getFullBookInfo() {
         String status = isAvailable ? "Available" : "Borrowed";
         return "Title: " + title +
                 " | Author: " + author +
@@ -43,10 +45,29 @@ public class Book implements Serializable {
                 " | Status: " + status;
     }
 
+    @Override
+    public String toString() {
+        return getFullBookInfo();
+    }
+
     public boolean matchesTitleSearch(String searchTitle) {
         if (searchTitle == null || searchTitle.isEmpty()) {
             return false;
         }
         return this.title.toLowerCase().contains(searchTitle.toLowerCase());
+    }
+
+    public boolean matchesIsbnSearch(String searchIsbn) {
+        if (searchIsbn == null || searchIsbn.isEmpty()) {
+            return false;
+        }
+        return this.isbn.toLowerCase().contains(searchIsbn.toLowerCase());
+    }
+
+    public boolean matchesAuthorSearch(String searchAuthor) {
+        if (searchAuthor == null || searchAuthor.isEmpty()) {
+            return false;
+        }
+        return this.author.toLowerCase().contains(searchAuthor.toLowerCase());
     }
 }

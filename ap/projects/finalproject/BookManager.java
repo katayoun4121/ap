@@ -23,8 +23,101 @@ public class BookManager {
         books.add(new Book("Data Structures", "Jack Johnson", 2019, "2222"));
         books.add(new Book("Algorithms", "Robert smith", 2018, "3333"));
         books.add(new Book("Database Systems", " Garcia Morone", 2021, "4444"));
-        books.add(new Book("Algorythm ", "Mark Tin", 2022, "5555"));
+        books.add(new Book("Algorythm", "Mark Tin", 2011, "5555"));
         saveBooks();
+    }
+
+    public List<Book> searchBooks(String title, String author, String isbn) {
+        return books.stream()
+                .filter(book ->
+                        (title == null || title.isEmpty() || book.matchesTitleSearch(title)) &&
+                                (author == null || author.isEmpty() || book.matchesAuthorSearch(author)) &&
+                                (isbn == null || isbn.isEmpty() || book.matchesIsbnSearch(isbn))
+                )
+                .collect(Collectors.toList());
+    }
+
+    public boolean editBook(String isbn, String newTitle, String newAuthor, Integer newYear) {
+        Book book = findBookByIsbn(isbn);
+        if (book != null) {
+            if (newTitle != null && !newTitle.isEmpty()) {
+                book.setTitle(newTitle);
+            }
+            if (newAuthor != null && !newAuthor.isEmpty()) {
+                book.setAuthor(newAuthor);
+            }
+            if (newYear != null && newYear > 0) {
+                book.setPublicationYear(newYear);
+            }
+            saveBooks();
+            return true;
+        }
+        return false;
+    }
+
+    public void editBookFromInput(Scanner scanner, String isbn) {
+        Book book = findBookByIsbn(isbn);
+        if (book == null) {
+            System.out.println("Book with ISBN " + isbn + " not found.");
+            return;
+        }
+
+        System.out.println("\nCurrent book information:");
+        System.out.println(book.getFullBookInfo());
+
+        System.out.println("\nEnter new information (press Enter to keep current value):");
+
+        System.out.print("New title (current: " + book.getTitle() + "): ");
+        String newTitle = scanner.nextLine();
+
+        System.out.print("New author (current: " + book.getAuthor() + "): ");
+        String newAuthor = scanner.nextLine();
+
+        System.out.print("New publication year (current: " + book.getPublicationYear() + "): ");
+        String yearInput = scanner.nextLine();
+        Integer newYear = null;
+
+        if (!yearInput.isEmpty()) {
+            try {
+                newYear = Integer.parseInt(yearInput);
+                if (newYear < 1000 || newYear > 2100) {
+                    System.out.println("Invalid year. Must be between 1000 and 2100.");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid year format.");
+                return;
+            }
+        }
+
+        if (editBook(isbn, newTitle, newAuthor, newYear)) {
+            System.out.println("Book information updated successfully!");
+            System.out.println("Updated information:");
+            System.out.println(findBookByIsbn(isbn).getFullBookInfo());
+        } else {
+            System.out.println("Failed to update book information.");
+        }
+    }
+
+    public void searchBooksFromInput(Scanner scanner) {
+        System.out.println("\n--- Advanced Book Search ---");
+
+        System.out.print("Title (press Enter to skip): ");
+        String title = scanner.nextLine();
+
+        System.out.print("Author (press Enter to skip): ");
+        String author = scanner.nextLine();
+
+        System.out.print("ISBN (press Enter to skip): ");
+        String isbn = scanner.nextLine();
+
+        List<Book> results = searchBooks(
+                title.isEmpty() ? null : title,
+                author.isEmpty() ? null : author,
+                isbn.isEmpty() ? null : isbn
+        );
+
+        displaySearchResults(results);
     }
 
     public void addNewBook(Book book) {
@@ -129,7 +222,7 @@ public class BookManager {
         }
 
         books.forEach(book -> {
-            System.out.println(book.getBookInfo());
+            System.out.println(book.getFullBookInfo());
         });
     }
 
@@ -155,7 +248,7 @@ public class BookManager {
         } else {
             System.out.println("\n--- Search Results ---");
             results.forEach(book -> {
-                System.out.println(book.getBookInfo());
+                System.out.println(book.getFullBookInfo());
             });
             System.out.println("Found " + results.size() + " book(s)");
         }
