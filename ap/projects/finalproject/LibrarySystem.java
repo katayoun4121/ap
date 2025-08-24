@@ -9,6 +9,7 @@ public class LibrarySystem {
     private StudentManager studentManager;
     private BookManager bookManager;
     private BorrowManager borrowManager;
+    private BorrowRequestManager borrowRequestManager;
     private EmployeeManager employeeManager;
     private StatisticsManager statisticsManager;
     private MenuHandler menuHandler;
@@ -18,6 +19,7 @@ public class LibrarySystem {
         this.studentManager = new StudentManager();
         this.bookManager = new BookManager();
         this.borrowManager = new BorrowManager();
+        this.borrowRequestManager = new BorrowRequestManager();
         this.employeeManager = new EmployeeManager();
         this.statisticsManager = new StatisticsManager(studentManager, bookManager, borrowManager);
         this.statisticsManager.setEmployeeManager(employeeManager);
@@ -28,8 +30,105 @@ public class LibrarySystem {
     public StudentManager getStudentManager() { return studentManager; }
     public BookManager getBookManager() { return bookManager; }
     public BorrowManager getBorrowManager() { return borrowManager; }
+    public BorrowRequestManager getBorrowRequestManager() { return borrowRequestManager; }
     public EmployeeManager getEmployeeManager() { return employeeManager; }
     public StatisticsManager getStatisticsManager() { return statisticsManager; }
+
+    public void createBorrowRequest(Student student, String bookIsbn, LocalDate desiredDate) {
+        Book book = bookManager.findBookByIsbn(bookIsbn);
+        if (book == null) {
+            System.out.println("Invalid ISBN.");
+            return;
+        }
+
+        if (!book.isAvailable()) {
+            System.out.println("Book is not available.");
+            return;
+        }
+
+        borrowRequestManager.createBorrowRequest(student.getUsername(), bookIsbn, desiredDate);
+    }
+
+    public void displayPendingRequests() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view pending requests.");
+            return;
+        }
+        borrowRequestManager.displayPendingRequests();
+    }
+
+    public void displayPendingRequestsForToday() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view pending requests.");
+            return;
+        }
+        borrowRequestManager.displayPendingRequestsForToday();
+    }
+
+    public void approveBorrowRequest() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can approve requests.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        borrowRequestManager.displayPendingRequestsForToday();
+
+        System.out.print("\nEnter student username to approve: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Enter book ISBN to approve: ");
+        String isbn = scanner.nextLine();
+
+        if (borrowRequestManager.approveRequest(username, isbn)) {
+            System.out.println("Borrow request approved successfully!");
+
+            bookManager.borrowBook(isbn);
+
+            borrowManager.borrowBook(username, isbn, 14); // 14 روز پیش‌فرض
+
+            System.out.println("Book has been marked as borrowed. Student can now pick up the book.");
+        } else {
+            System.out.println("Failed to approve request. Request not found or already processed.");
+        }
+    }
+
+    public void rejectBorrowRequest() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can reject requests.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        borrowRequestManager.displayPendingRequestsForToday();
+
+        System.out.print("\nEnter student username to reject: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Enter book ISBN to reject: ");
+        String isbn = scanner.nextLine();
+
+        System.out.print("Enter rejection reason: ");
+        String reason = scanner.nextLine();
+
+        if (borrowRequestManager.rejectRequest(username, isbn, reason)) {
+            System.out.println("Borrow request rejected successfully!");
+        } else {
+            System.out.println("Failed to reject request. Request not found or already processed.");
+        }
+    }
+
+    public void viewMyBorrowRequests(Student student) {
+        List<BorrowRequest> requests = borrowRequestManager.getStudentRequests(student.getUsername());
+
+        System.out.println("\n--- My Borrow Requests ---");
+        if (requests.isEmpty()) {
+            System.out.println("You have no borrow requests.");
+            return;
+        }
+
+        requests.forEach(System.out::println);
+    }
 
     public int getStudentCount() {
         return this.studentManager.getStudentCount();
@@ -159,26 +258,24 @@ public class LibrarySystem {
             return;
         }
 
-        System.out.print("Enter number of days to borrow (1-30): ");
-        int borrowDays = scanner.nextInt();
-        scanner.nextLine();
+        System.out.print("Enter desired borrow date (YYYY-MM-DD) or press Enter for today: ");
+        String dateInput = scanner.nextLine();
+        LocalDate desiredDate = LocalDate.now();
 
-        if (borrowDays < 1 || borrowDays > 30) {
-            System.out.println("Invalid number of days. Must be between 1 and 30.");
-            return;
+        if (!dateInput.isEmpty()) {
+            try {
+                desiredDate = LocalDate.parse(dateInput);
+                if (desiredDate.isBefore(LocalDate.now())) {
+                    System.out.println("Cannot request a date in the past.");
+                    return;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Please use YYYY-MM-DD.");
+                return;
+            }
         }
 
-        if (bookManager.borrowBook(isbn)) {
-            borrowManager.borrowBook(student.getUsername(), isbn, borrowDays);
-
-            LocalDate dueDate = LocalDate.now().plusDays(borrowDays);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-            System.out.println("Book borrowed successfully!");
-            System.out.println("Due date: " + dueDate.format(formatter));
-        } else {
-            System.out.println("Failed to borrow book.");
-        }
+        createBorrowRequest(student, isbn, desiredDate);
     }
 
     public void returnBook(Student student) {
