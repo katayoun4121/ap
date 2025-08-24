@@ -2,6 +2,7 @@ package ap.projects.finalproject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class BookManager {
@@ -22,8 +23,60 @@ public class BookManager {
         books.add(new Book("Data Structures", "Jack Johnson", 2019, "2222"));
         books.add(new Book("Algorithms", "Robert smith", 2018, "3333"));
         books.add(new Book("Database Systems", " Garcia Morone", 2021, "4444"));
-        books.add(new Book("Algorythm","Mark Tin",2011,"5555"));
+        books.add(new Book("Algorythm ", "Mark Tin", 2022, "5555"));
         saveBooks();
+    }
+
+    public void addNewBook(Book book) {
+        if (isIsbnTaken(book.getIsbn())) {
+            System.out.println("A book with this ISBN already exists.");
+            return;
+        }
+
+        books.add(book);
+        saveBooks();
+        System.out.println("Book added successfully!");
+    }
+
+    private boolean isIsbnTaken(String isbn) {
+        return books.stream().anyMatch(book -> book.getIsbn().equals(isbn));
+    }
+
+    public Book createBookFromInput(Scanner scanner) {
+        System.out.println("\n--- Add New Book ---");
+
+        System.out.print("Book title: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Author: ");
+        String author = scanner.nextLine();
+
+        System.out.print("Publication year: ");
+        int year = getIntInput(scanner, 1000, 2100);
+
+        System.out.print("ISBN: ");
+        String isbn = scanner.nextLine();
+
+        if (isbn.isEmpty() || isbn.length() < 10) {
+            System.out.println("Invalid ISBN. Please enter a valid ISBN (minimum 10 characters).");
+            return null;
+        }
+
+        return new Book(title, author, year, isbn);
+    }
+
+    private int getIntInput(Scanner scanner, int min, int max) {
+        while (true) {
+            try {
+                int input = Integer.parseInt(scanner.nextLine());
+                if (input >= min && input <= max) {
+                    return input;
+                }
+                System.out.printf("Please enter a number between %d and %d: ", min, max);
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Please enter a number: ");
+            }
+        }
     }
 
     public List<Book> getAllBooks() {

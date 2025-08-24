@@ -152,22 +152,23 @@ public class MenuHandler {
             System.out.println("2. Search Books by Title");
             System.out.println("3. View Available Books");
             System.out.println("4. View All Books");
-            System.out.println("5. Change Password");
+            System.out.println("5. Add New Book");
+            System.out.println("6. Change Password");
 
             if (currentEmployee.isManager()) {
-                System.out.println("6. Register New Employee");
-                System.out.println("7. View All Employees");
-                System.out.println("8. View All Students");
-                System.out.println("9. Logout");
+                System.out.println("7. Register New Employee");
+                System.out.println("8. View All Employees");
+                System.out.println("9. View All Students");
+                System.out.println("10. Logout");
                 System.out.print("Please enter your choice: ");
 
-                int choice = getIntInput(1, 9);
+                int choice = getIntInput(1, 10);
                 handleManagerChoice(choice);
             } else {
-                System.out.println("6. Logout");
+                System.out.println("7. Logout");
                 System.out.print("Please enter your choice: ");
 
-                int choice = getIntInput(1, 6);
+                int choice = getIntInput(1, 7);
                 handleStaffChoice(choice);
             }
         }
@@ -188,18 +189,21 @@ public class MenuHandler {
                 librarySystem.getBookManager().displayAllBooks();
                 break;
             case 5:
-                handleChangePassword();
+                librarySystem.addNewBook();
                 break;
             case 6:
-                handleEmployeeRegistration();
+                handleChangePassword();
                 break;
             case 7:
-                librarySystem.displayAllEmployees();
+                handleEmployeeRegistration();
                 break;
             case 8:
-                librarySystem.getStudentManager().displayStudents();
+                librarySystem.displayAllEmployees();
                 break;
             case 9:
+                librarySystem.getStudentManager().displayStudents();
+                break;
+            case 10:
                 currentEmployee = null;
                 librarySystem.setCurrentEmployee(null);
                 System.out.println("Logged out successfully.");
@@ -224,9 +228,12 @@ public class MenuHandler {
                 librarySystem.getBookManager().displayAllBooks();
                 break;
             case 5:
-                handleChangePassword();
+                librarySystem.addNewBook();
                 break;
             case 6:
+                handleChangePassword();
+                break;
+            case 7:
                 currentEmployee = null;
                 librarySystem.setCurrentEmployee(null);
                 System.out.println("Logged out successfully.");

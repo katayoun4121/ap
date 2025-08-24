@@ -25,7 +25,6 @@ public class LibrarySystem {
         this.currentEmployee = null;
     }
 
-    // اضافه کردن متدهای Getter
     public StudentManager getStudentManager() { return studentManager; }
     public BookManager getBookManager() { return bookManager; }
     public BorrowManager getBorrowManager() { return borrowManager; }
@@ -50,6 +49,20 @@ public class LibrarySystem {
         statisticsManager.displayStatistics();
     }
 
+    public void addNewBook() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can add books.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        Book newBook = bookManager.createBookFromInput(scanner);
+
+        if (newBook != null) {
+            bookManager.addNewBook(newBook);
+        }
+    }
+
     public void registerStudent(String name, String studentId, String username, String password) {
         studentManager.registerStudent(name, studentId, username, password);
     }
@@ -62,7 +75,6 @@ public class LibrarySystem {
         return employeeManager.authenticateEmployee(username, password);
     }
 
-    // اضافه کردن متد تغییر رمز عبور کارمند
     public boolean changeEmployeePassword(String username, String currentPassword, String newPassword) {
         return employeeManager.changePassword(username, currentPassword, newPassword);
     }
