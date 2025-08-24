@@ -9,19 +9,35 @@ public class LibrarySystem {
     private StudentManager studentManager;
     private BookManager bookManager;
     private BorrowManager borrowManager;
+    private EmployeeManager employeeManager;
     private StatisticsManager statisticsManager;
     private MenuHandler menuHandler;
+    private Employee currentEmployee;
 
     public LibrarySystem() {
         this.studentManager = new StudentManager();
         this.bookManager = new BookManager();
         this.borrowManager = new BorrowManager();
+        this.employeeManager = new EmployeeManager();
         this.statisticsManager = new StatisticsManager(studentManager, bookManager, borrowManager);
+        this.statisticsManager.setEmployeeManager(employeeManager);
         this.menuHandler = new MenuHandler(this);
+        this.currentEmployee = null;
     }
+
+    // اضافه کردن متدهای Getter
+    public StudentManager getStudentManager() { return studentManager; }
+    public BookManager getBookManager() { return bookManager; }
+    public BorrowManager getBorrowManager() { return borrowManager; }
+    public EmployeeManager getEmployeeManager() { return employeeManager; }
+    public StatisticsManager getStatisticsManager() { return statisticsManager; }
 
     public int getStudentCount() {
         return this.studentManager.getStudentCount();
+    }
+
+    public int getEmployeeCount() {
+        return this.employeeManager.getEmployeeCount();
     }
 
     public void displayStudentCount() {
@@ -40,6 +56,26 @@ public class LibrarySystem {
 
     public Student authenticateStudent(String username, String password) {
         return studentManager.authenticateStudent(username, password);
+    }
+
+    public Employee authenticateEmployee(String username, String password) {
+        return employeeManager.authenticateEmployee(username, password);
+    }
+
+    public void registerEmployee(String name, String employeeId, String username, String password, String role) {
+        if (currentEmployee != null && currentEmployee.isManager()) {
+            employeeManager.registerEmployee(name, employeeId, username, password, role);
+        } else {
+            System.out.println("Only managers can register new employees.");
+        }
+    }
+
+    public void displayAllEmployees() {
+        if (currentEmployee != null && currentEmployee.isManager()) {
+            employeeManager.displayAllEmployees();
+        } else {
+            System.out.println("Only managers can view employee list.");
+        }
     }
 
     public void editStudentInformation(Student student) {
@@ -168,6 +204,6 @@ public class LibrarySystem {
         system.start();
     }
 
-    public BorrowManager getBorrowManager() { return borrowManager; }
-    public StatisticsManager getStatisticsManager() { return statisticsManager; }
+    public Employee getCurrentEmployee() { return currentEmployee; }
+    public void setCurrentEmployee(Employee employee) { this.currentEmployee = employee; }
 }
