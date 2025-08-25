@@ -17,6 +17,48 @@ public class BorrowManager {
         }
     }
 
+    public StudentBorrowReport generateStudentReport(String studentUsername) {
+        List<BorrowRecord> studentBorrows = getStudentBorrows(studentUsername);
+        return new StudentBorrowReport(studentUsername, studentBorrows);
+    }
+
+    public List<String> getStudentsWithOverdueBorrows() {
+        return borrowRecords.stream()
+                .filter(BorrowRecord::isOverdue)
+                .map(BorrowRecord::getStudentUsername)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getStudentsWithActiveBorrows() {
+        return borrowRecords.stream()
+                .filter(record -> !record.isReturned())
+                .map(BorrowRecord::getStudentUsername)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public void displayBorrowStatistics() {
+        int totalBorrows = getTotalBorrowsCount();
+        int activeBorrows = getActiveBorrowsCount();
+        int overdueBorrows = getOverdueBorrowsCount();
+        int returnedBorrows = getReturnedBorrowsCount();
+
+        System.out.println("\n=== Library Borrow Statistics ===");
+        System.out.println("Total Borrow Records: " + totalBorrows);
+        System.out.println("Active Borrows: " + activeBorrows);
+        System.out.println("Overdue Borrows: " + overdueBorrows);
+        System.out.println("Returned Borrows: " + returnedBorrows);
+
+        double returnRate = totalBorrows > 0 ? (returnedBorrows * 100.0 / totalBorrows) : 0;
+        System.out.printf("Overall Return Rate: %.1f%%\n", returnRate);
+
+        List<String> studentsWithOverdue = getStudentsWithOverdueBorrows();
+        if (!studentsWithOverdue.isEmpty()) {
+            System.out.println("\nStudents with overdue books: " + studentsWithOverdue.size());
+        }
+    }
+
     public List<BorrowRecord> getAllBorrows() {
         return new ArrayList<>(borrowRecords);
     }

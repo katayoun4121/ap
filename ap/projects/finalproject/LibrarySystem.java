@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class LibrarySystem {
     private StudentManager studentManager;
@@ -25,6 +26,65 @@ public class LibrarySystem {
         this.statisticsManager.setEmployeeManager(employeeManager);
         this.menuHandler = new MenuHandler(this);
         this.currentEmployee = null;
+    }
+
+    public void viewStudentBorrowReport() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view student reports.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n=== Student Borrow Report ===");
+
+        System.out.print("Enter student username: ");
+        String username = scanner.nextLine();
+
+        Student student = studentManager.authenticateStudent(username, "");
+        if (student == null) {
+            System.out.println("Student not found.");
+            return;
+        }
+
+        StudentBorrowReport report = borrowManager.generateStudentReport(username);
+        report.displayReport();
+    }
+
+    public void viewBorrowStatistics() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view borrow statistics.");
+            return;
+        }
+
+        borrowManager.displayBorrowStatistics();
+    }
+
+    public void viewStudentsWithOverdueBorrows() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view this information.");
+            return;
+        }
+
+        List<String> students = borrowManager.getStudentsWithOverdueBorrows();
+
+        System.out.println("\n=== Students with Overdue Books ===");
+        if (students.isEmpty()) {
+            System.out.println("No students have overdue books.");
+            return;
+        }
+
+        System.out.println("Total students with overdue books: " + students.size());
+        System.out.println("\nList of students:");
+        students.forEach(student -> {
+            List<BorrowRecord> overdueBooks = borrowManager.getStudentBorrows(student).stream()
+                    .filter(BorrowRecord::isOverdue)
+                    .collect(Collectors.toList());
+
+            System.out.println("Student: " + student + " - Overdue books: " + overdueBooks.size());
+            overdueBooks.forEach(record ->
+                    System.out.println("  - " + record.getBookIsbn() + " (Due: " + record.getDueDate() + ")")
+            );
+        });
     }
 
     public StudentManager getStudentManager() { return studentManager; }
@@ -82,11 +142,8 @@ public class LibrarySystem {
 
         if (borrowRequestManager.approveRequest(username, isbn)) {
             System.out.println("Borrow request approved successfully!");
-
             bookManager.borrowBook(isbn);
-
-            borrowManager.borrowBook(username, isbn, 14); // 14 روز پیش‌فرض
-
+            borrowManager.borrowBook(username, isbn, 14);
             System.out.println("Book has been marked as borrowed. Student can now pick up the book.");
         } else {
             System.out.println("Failed to approve request. Request not found or already processed.");

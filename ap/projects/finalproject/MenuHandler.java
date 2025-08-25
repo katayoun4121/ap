@@ -162,22 +162,25 @@ public class MenuHandler {
             System.out.println("8. View Pending Borrow Requests");
             System.out.println("9. Approve Borrow Requests");
             System.out.println("10. Reject Borrow Requests");
-            System.out.println("11. Change Password");
+            System.out.println("11. View Student Borrow Report");
+            System.out.println("12. View Borrow Statistics");
+            System.out.println("13. View Students with Overdue Books");
+            System.out.println("14. Change Password");
 
             if (currentEmployee.isManager()) {
-                System.out.println("12. Register New Employee");
-                System.out.println("13. View All Employees");
-                System.out.println("14. View All Students");
+                System.out.println("15. Register New Employee");
+                System.out.println("16. View All Employees");
+                System.out.println("17. View All Students");
+                System.out.println("18. Logout");
+                System.out.print("Please enter your choice: ");
+
+                int choice = getIntInput(1, 18);
+                handleManagerChoice(choice);
+            } else {
                 System.out.println("15. Logout");
                 System.out.print("Please enter your choice: ");
 
                 int choice = getIntInput(1, 15);
-                handleManagerChoice(choice);
-            } else {
-                System.out.println("12. Logout");
-                System.out.print("Please enter your choice: ");
-
-                int choice = getIntInput(1, 12);
                 handleStaffChoice(choice);
             }
         }
@@ -216,18 +219,27 @@ public class MenuHandler {
                 librarySystem.rejectBorrowRequest();
                 break;
             case 11:
-                handleChangePassword();
+                librarySystem.viewStudentBorrowReport();
                 break;
             case 12:
-                handleEmployeeRegistration();
+                librarySystem.viewBorrowStatistics();
                 break;
             case 13:
-                librarySystem.displayAllEmployees();
+                librarySystem.viewStudentsWithOverdueBorrows();
                 break;
             case 14:
-                librarySystem.getStudentManager().displayStudents();
+                handleChangePassword();
                 break;
             case 15:
+                handleEmployeeRegistration();
+                break;
+            case 16:
+                librarySystem.displayAllEmployees();
+                break;
+            case 17:
+                librarySystem.getStudentManager().displayStudents();
+                break;
+            case 18:
                 currentEmployee = null;
                 librarySystem.setCurrentEmployee(null);
                 System.out.println("Logged out successfully.");
@@ -270,9 +282,18 @@ public class MenuHandler {
                 librarySystem.rejectBorrowRequest();
                 break;
             case 11:
-                handleChangePassword();
+                librarySystem.viewStudentBorrowReport();
                 break;
             case 12:
+                librarySystem.viewBorrowStatistics();
+                break;
+            case 13:
+                librarySystem.viewStudentsWithOverdueBorrows();
+                break;
+            case 14:
+                handleChangePassword();
+                break;
+            case 15:
                 currentEmployee = null;
                 librarySystem.setCurrentEmployee(null);
                 System.out.println("Logged out successfully.");
