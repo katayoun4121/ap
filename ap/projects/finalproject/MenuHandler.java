@@ -23,7 +23,8 @@ public class MenuHandler {
             System.out.println("3. View Statistics");
             System.out.println("4. Search Books by Title");
             System.out.println("5. View Available Books");
-            System.out.println("6. Exit");
+            System.out.println("6.Student Registeration ");
+            System.out.println("7. Exit");
             System.out.print("Please enter your choice: ");
 
             int choice = getIntInput(1, 6);
@@ -44,7 +45,10 @@ public class MenuHandler {
                 case 5:
                     librarySystem.displayAvailableBooks();
                     break;
-                case 6:
+                case  6:
+                    handleStudentRegistration();
+                    break;
+                case 7:
                     System.out.println("Exiting system. Goodbye!");
                     return;
                 default:
@@ -72,7 +76,23 @@ public class MenuHandler {
             System.out.println("Invalid username or password. Please try again.");
         }
     }
+    private void handleStudentRegistration() {
+        System.out.println("\n--- New Student Registration ---");
 
+        System.out.print("Student name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Student ID: ");
+        String studentId = scanner.nextLine();
+
+        System.out.print("Username: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
+
+        librarySystem.registerStudent(name, studentId, username, password);
+    }
     private void handleEmployeeLogin() {
         System.out.println("\n--- Employee Login ---");
 

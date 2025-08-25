@@ -1,5 +1,6 @@
 package ap.projects.finalproject;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +30,86 @@ public class StudentManager {
     }
 
     public Student authenticateStudent(String username, String password) {
-        return students.stream()
+        Student student = students.stream()
                 .filter(s -> s.getUsername().equals(username) && s.getPassword().equals(password))
                 .findFirst()
                 .orElse(null);
+
+        if (student != null && !student.isActive()) {
+            System.out.println("Your account is inactive. Please contact the library administrator.");
+            return null;
+        }
+
+        return student;
+    }
+
+    public boolean toggleStudentStatus(String username) {
+        Student student = findStudentByUsername(username);
+        if (student != null) {
+            student.setActive(!student.isActive());
+            fileManager.saveStudents(students);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean deactivateStudent(String username) {
+        Student student = findStudentByUsername(username);
+        if (student != null) {
+            student.setActive(false);
+            fileManager.saveStudents(students);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean activateStudent(String username) {
+        Student student = findStudentByUsername(username);
+        if (student != null) {
+            student.setActive(true);
+            fileManager.saveStudents(students);
+            return true;
+        }
+        return false;
+    }
+
+    public Student findStudentByUsername(String username) {
+        return students.stream()
+                .filter(s -> s.getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void displayInactiveStudents() {
+        List<Student> inactiveStudents = students.stream()
+                .filter(student -> !student.isActive())
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        System.out.println("\n--- Inactive Students ---");
+        if (inactiveStudents.isEmpty()) {
+            System.out.println("No inactive students.");
+            return;
+        }
+
+        for (Student student : inactiveStudents) {
+            System.out.println(student);
+        }
+    }
+
+    public void displayActiveStudents() {
+        List<Student> activeStudents = students.stream()
+                .filter(Student::isActive)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        System.out.println("\n--- Active Students ---");
+        if (activeStudents.isEmpty()) {
+            System.out.println("No active students.");
+            return;
+        }
+
+        for (Student student : activeStudents) {
+            System.out.println(student);
+        }
     }
 
     public void displayStudents() {
@@ -54,5 +131,17 @@ public class StudentManager {
 
     public int getStudentCount() {
         return students.size();
+    }
+
+    public int getActiveStudentCount() {
+        return (int) students.stream()
+                .filter(Student::isActive)
+                .count();
+    }
+
+    public int getInactiveStudentCount() {
+        return (int) students.stream()
+                .filter(student -> !student.isActive())
+                .count();
     }
 }

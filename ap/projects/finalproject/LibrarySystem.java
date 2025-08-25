@@ -27,6 +27,125 @@ public class LibrarySystem {
         this.menuHandler = new MenuHandler(this);
         this.currentEmployee = null;
     }
+    public void toggleStudentStatus() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can manage student status.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n--- Manage Student Status ---");
+
+        System.out.print("Enter student username: ");
+        String username = scanner.nextLine();
+
+        Student student = studentManager.findStudentByUsername(username);
+        if (student == null) {
+            System.out.println("Student not found.");
+            return;
+        }
+
+        if (studentManager.toggleStudentStatus(username)) {
+            String newStatus = studentManager.findStudentByUsername(username).isActive() ? "activated" : "deactivated";
+            System.out.println("Student status updated successfully. Student is now " + newStatus + ".");
+        } else {
+            System.out.println("Failed to update student status.");
+        }
+    }
+    public void deactivateStudent() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can deactivate students.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n--- Deactivate Student ---");
+
+        System.out.print("Enter student username: ");
+        String username = scanner.nextLine();
+
+        Student student = studentManager.findStudentByUsername(username);
+        if (student == null) {
+            System.out.println("Student not found.");
+            return;
+        }
+
+        if (!student.isActive()) {
+            System.out.println("Student is already inactive.");
+            return;
+        }
+
+        if (studentManager.deactivateStudent(username)) {
+            System.out.println("Student deactivated successfully.");
+        } else {
+            System.out.println("Failed to deactivate student.");
+        }
+    }
+    public void activateStudent() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can activate students.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n--- Activate Student ---");
+
+        System.out.print("Enter student username: ");
+        String username = scanner.nextLine();
+
+        Student student = studentManager.findStudentByUsername(username);
+        if (student == null) {
+            System.out.println("Student not found.");
+            return;
+        }
+
+
+        if (student.isActive()) {
+            System.out.println("Student is already active.");
+            return;
+        }
+        if (studentManager.activateStudent(username)) {
+            System.out.println("Student activated successfully.");
+        } else {
+            System.out.println("Failed to activate student.");
+        }
+    }
+
+    public void displayInactiveStudents() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view inactive students.");
+            return;
+        }
+
+        studentManager.displayInactiveStudents();
+    }
+    public void displayActiveStudents() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view active students.");
+            return;
+        }
+
+        studentManager.displayActiveStudents();
+    }
+    public void createBorrowRequest(Student student, String bookIsbn, LocalDate desiredDate) {
+        if (!student.isActive()) {
+            System.out.println("Your account is inactive. You cannot borrow books.");
+            return;
+        }
+
+        Book book = bookManager.findBookByIsbn(bookIsbn);
+        if (book == null) {
+            System.out.println("Invalid ISBN.");
+            return;
+        }
+
+        if (!book.isAvailable()) {
+            System.out.println("Book is not available.");
+            return;
+        }
+
+        borrowRequestManager.createBorrowRequest(student.getUsername(), bookIsbn, desiredDate);
+    }
     public void pickupBook(Student student) {
         System.out.println("\n--- Pickup Book ---");
         borrowManager.displayStudentReadyForPickupBooks(student.getUsername());
@@ -146,21 +265,6 @@ public class LibrarySystem {
     public BorrowRequestManager getBorrowRequestManager() { return borrowRequestManager; }
     public EmployeeManager getEmployeeManager() { return employeeManager; }
     public StatisticsManager getStatisticsManager() { return statisticsManager; }
-
-    public void createBorrowRequest(Student student, String bookIsbn, LocalDate desiredDate) {
-        Book book = bookManager.findBookByIsbn(bookIsbn);
-        if (book == null) {
-            System.out.println("Invalid ISBN.");
-            return;
-        }
-
-        if (!book.isAvailable()) {
-            System.out.println("Book is not available.");
-            return;
-        }
-
-        borrowRequestManager.createBorrowRequest(student.getUsername(), bookIsbn, desiredDate);
-    }
 
     public void displayPendingRequests() {
         if (currentEmployee == null) {
