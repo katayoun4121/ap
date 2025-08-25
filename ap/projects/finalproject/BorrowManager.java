@@ -17,6 +17,62 @@ public class BorrowManager {
         }
     }
 
+    public boolean markBookAsPickedUp(String studentUsername, String bookIsbn) {
+        BorrowRecord record = findReadyForPickupRecord(studentUsername, bookIsbn);
+        if (record != null) {
+            record.markAsPickedUp();
+            saveRecords();
+            return true;
+        }
+        return false;
+    }
+
+    public BorrowRecord findReadyForPickupRecord(String studentUsername, String bookIsbn) {
+        return borrowRecords.stream()
+                .filter(record -> record.getStudentUsername().equals(studentUsername) &&
+                        record.getBookIsbn().equals(bookIsbn) &&
+                        record.isReadyForPickup())
+                .findFirst()
+                .orElse(null);
+    }
+
+    public List<BorrowRecord> getReadyForPickupRecords(String studentUsername) {
+        return borrowRecords.stream()
+                .filter(record -> record.getStudentUsername().equals(studentUsername) &&
+                        record.isReadyForPickup())
+                .collect(Collectors.toList());
+    }
+
+    public List<BorrowRecord> getAllReadyForPickupRecords() {
+        return borrowRecords.stream()
+                .filter(BorrowRecord::isReadyForPickup)
+                .collect(Collectors.toList());
+    }
+
+    public void displayReadyForPickupBooks() {
+        List<BorrowRecord> readyRecords = getAllReadyForPickupRecords();
+
+        System.out.println("\n--- Books Ready for Pickup ---");
+        if (readyRecords.isEmpty()) {
+            System.out.println("No books ready for pickup.");
+            return;
+        }
+
+        readyRecords.forEach(System.out::println);
+    }
+
+    public void displayStudentReadyForPickupBooks(String studentUsername) {
+        List<BorrowRecord> readyRecords = getReadyForPickupRecords(studentUsername);
+
+        System.out.println("\n--- Your Books Ready for Pickup ---");
+        if (readyRecords.isEmpty()) {
+            System.out.println("You have no books ready for pickup.");
+            return;
+        }
+
+        readyRecords.forEach(System.out::println);
+    }
+
     public StudentBorrowReport generateStudentReport(String studentUsername) {
         List<BorrowRecord> studentBorrows = getStudentBorrows(studentUsername);
         return new StudentBorrowReport(studentUsername, studentBorrows);
@@ -43,9 +99,11 @@ public class BorrowManager {
         int activeBorrows = getActiveBorrowsCount();
         int overdueBorrows = getOverdueBorrowsCount();
         int returnedBorrows = getReturnedBorrowsCount();
+        int readyForPickup = getReadyForPickupCount();
 
         System.out.println("\n=== Library Borrow Statistics ===");
         System.out.println("Total Borrow Records: " + totalBorrows);
+        System.out.println("Ready for Pickup: " + readyForPickup);
         System.out.println("Active Borrows: " + activeBorrows);
         System.out.println("Overdue Borrows: " + overdueBorrows);
         System.out.println("Returned Borrows: " + returnedBorrows);
@@ -57,6 +115,12 @@ public class BorrowManager {
         if (!studentsWithOverdue.isEmpty()) {
             System.out.println("\nStudents with overdue books: " + studentsWithOverdue.size());
         }
+    }
+
+    public int getReadyForPickupCount() {
+        return (int) borrowRecords.stream()
+                .filter(BorrowRecord::isReadyForPickup)
+                .count();
     }
 
     public List<BorrowRecord> getAllBorrows() {
@@ -97,7 +161,7 @@ public class BorrowManager {
 
     public boolean returnBook(String studentUsername, String bookIsbn) {
         BorrowRecord record = findActiveBorrow(studentUsername, bookIsbn);
-        if (record != null) {
+        if (record != null && record.isPickedUp()) {
             record.markAsReturned();
             saveRecords();
             return true;

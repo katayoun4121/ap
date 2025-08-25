@@ -27,6 +27,59 @@ public class LibrarySystem {
         this.menuHandler = new MenuHandler(this);
         this.currentEmployee = null;
     }
+    public void pickupBook(Student student) {
+        System.out.println("\n--- Pickup Book ---");
+        borrowManager.displayStudentReadyForPickupBooks(student.getUsername());
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter ISBN of the book you want to pickup: ");
+        String isbn = scanner.nextLine();
+
+        if (borrowManager.markBookAsPickedUp(student.getUsername(), isbn)) {
+            System.out.println("Book picked up successfully! The due date starts from today.");
+
+            BorrowRecord record = borrowManager.findActiveBorrow(student.getUsername(), isbn);
+            if (record != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                System.out.println("Due date: " + record.getDueDate().format(formatter));
+            }
+        } else {
+            System.out.println("Failed to pickup book. Book not found or not ready for pickup.");
+        }
+    }
+
+    public void displayReadyForPickupBooks() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view this information.");
+            return;
+        }
+
+        borrowManager.displayReadyForPickupBooks();
+    }
+    public void markBookAsPickedUpByEmployee() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can perform this action.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n--- Mark Book as Picked Up ---");
+
+        borrowManager.displayReadyForPickupBooks();
+
+        System.out.print("Enter student username: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Enter book ISBN: ");
+        String isbn = scanner.nextLine();
+
+        if (borrowManager.markBookAsPickedUp(username, isbn)) {
+            System.out.println("Book marked as picked up successfully!");
+        }else {
+            System.out.println("Failed to mark book as picked up. Record not found or not ready for pickup.");
+        }
+    }
+
 
     public void viewStudentBorrowReport() {
         if (currentEmployee == null) {

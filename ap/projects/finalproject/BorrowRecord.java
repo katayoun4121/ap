@@ -11,7 +11,9 @@ public class BorrowRecord implements Serializable {
     private LocalDate borrowDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
+    private LocalDate actualPickupDate;
     private boolean isReturned;
+    private boolean isPickedUp;
 
     public BorrowRecord(String studentUsername, String bookIsbn, LocalDate borrowDate, LocalDate dueDate) {
         this.studentUsername = studentUsername;
@@ -19,7 +21,9 @@ public class BorrowRecord implements Serializable {
         this.borrowDate = borrowDate;
         this.dueDate = dueDate;
         this.isReturned = false;
+        this.isPickedUp = false;
         this.returnDate = null;
+        this.actualPickupDate = null;
     }
 
     public String getStudentUsername() { return studentUsername; }
@@ -27,7 +31,14 @@ public class BorrowRecord implements Serializable {
     public LocalDate getBorrowDate() { return borrowDate; }
     public LocalDate getDueDate() { return dueDate; }
     public LocalDate getReturnDate() { return returnDate; }
+    public LocalDate getActualPickupDate() { return actualPickupDate; }
     public boolean isReturned() { return isReturned; }
+    public boolean isPickedUp() { return isPickedUp; }
+
+    public void markAsPickedUp() {
+        this.isPickedUp = true;
+        this.actualPickupDate = LocalDate.now();
+    }
 
     public void markAsReturned() {
         this.isReturned = true;
@@ -35,7 +46,11 @@ public class BorrowRecord implements Serializable {
     }
 
     public boolean isOverdue() {
-        return !isReturned && LocalDate.now().isAfter(dueDate);
+        return isPickedUp && !isReturned && LocalDate.now().isAfter(dueDate);
+    }
+
+    public boolean isReadyForPickup() {
+        return !isPickedUp && !isReturned;
     }
 
     public long getDaysOverdue() {
@@ -46,11 +61,20 @@ public class BorrowRecord implements Serializable {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String status = isReturned ? "Returned on " + returnDate.format(formatter) :
-                isOverdue() ? "OVERDUE (" + getDaysOverdue() + " days)" : "Due on " + dueDate.format(formatter);
+        String status;
+
+        if (isReturned) {
+            status = "Returned on " + returnDate.format(formatter);
+        } else if (isPickedUp) {
+            status = isOverdue() ? "OVERDUE (" + getDaysOverdue() + " days)" : "Due on " + dueDate.format(formatter);
+        } else {
+            status = "Ready for pickup";
+        }
 
         return "Book ISBN: " + bookIsbn +
                 " | Borrowed: " + borrowDate.format(formatter) +
-                " | " + status;
+                " | Due: " + dueDate.format(formatter) +
+                (actualPickupDate != null ? " | Picked up: " + actualPickupDate.format(formatter) : "") +
+                " | Status: " + status;
     }
 }
