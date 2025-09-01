@@ -68,7 +68,7 @@ public class EmployeeManager {
     }
 
     public void displayAllEmployees() {
-        System.out.println("\n--- List of Employees ---");
+        System.out.println("\n--- List of  Employees ---");
         if (employees.isEmpty()) {
             System.out.println("No employees registered yet.");
             return;

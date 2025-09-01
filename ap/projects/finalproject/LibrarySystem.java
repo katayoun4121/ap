@@ -480,7 +480,7 @@ public class LibrarySystem {
             try {
                 desiredDate = LocalDate.parse(dateInput);
                 if (desiredDate.isBefore(LocalDate.now())) {
-                    System.out.println("Cannot request a date in the past.");
+                    System.out.println("Cannot request  a date in the past.");
                     return;
                 }
             } catch (Exception e) {

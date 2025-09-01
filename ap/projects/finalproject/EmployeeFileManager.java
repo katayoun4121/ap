@@ -27,7 +27,7 @@ public class EmployeeFileManager {
             if (loadedObject instanceof List) {
                 return (List<Employee>) loadedObject;
             } else {
-                System.out.println("Invalid data format in employees file.");
+                System.out.println("Invalid data  format in employees file.");
                 return new ArrayList<>();
             }
         } catch (IOException | ClassNotFoundException e) {

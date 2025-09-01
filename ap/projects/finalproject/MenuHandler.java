@@ -3,7 +3,7 @@ package ap.projects.finalproject;
 import java.util.Scanner;
 
 public class MenuHandler {
-    private Scanner scanner;
+    private Scanner scanner ;
     private LibrarySystem librarySystem;
     private Student currentUser;
     private Employee currentEmployee;
