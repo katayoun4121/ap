@@ -186,18 +186,27 @@ public class MenuHandler {
             System.out.println("12. View Borrow Statistics");
             System.out.println("13. View Students with Overdue Books");
             System.out.println("14. Change Password");
+            System.out.println("15.view my performance");
 
             if (currentEmployee.isManager()) {
-                System.out.println("15. Register New Employee");
-                System.out.println("16. View All Employees");
-                System.out.println("17. View All Students");
-                System.out.println("18. Logout");
+                System.out.println("1. Register New Employee");
+                System.out.println("2. View All Employees");
+                System.out.println("3. View All Students");
+                System.out.println("4. Logout");
+                System.out.println("5.view all employee performance:");
                 System.out.print("Please enter your choice: ");
 
                 int choice = getIntInput(1, 18);
                 handleManagerChoice(choice);
             } else {
-                System.out.println("15. Logout");
+                System.out.println("6. Add New Book");
+                System.out.println("7. Edit Book Information");
+                System.out.println("8. View Pending Borrow Requests");
+                System.out.println("9. Approve Borrow Requests");
+                System.out.println("10. Reject Borrow Requests");
+                System.out.println("11. Mark Book as Picked Up");
+                System.out.println("12. View My Performance");
+                System.out.println("1. Logout");
                 System.out.print("Please enter your choice: ");
 
                 int choice = getIntInput(1, 15);

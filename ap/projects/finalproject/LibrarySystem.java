@@ -13,6 +13,7 @@ public class LibrarySystem {
     private BorrowRequestManager borrowRequestManager;
     private EmployeeManager employeeManager;
     private StatisticsManager statisticsManager;
+    private  EmployeePerformanceManager performanceManager;
     private MenuHandler menuHandler;
     private Employee currentEmployee;
 
@@ -24,8 +25,81 @@ public class LibrarySystem {
         this.employeeManager = new EmployeeManager();
         this.statisticsManager = new StatisticsManager(studentManager, bookManager, borrowManager);
         this.statisticsManager.setEmployeeManager(employeeManager);
+        this.performanceManager= new EmployeePerformanceManager();
         this.menuHandler = new MenuHandler(this);
         this.currentEmployee = null;
+    }
+    public void recordBookAdded() {
+        if (currentEmployee != null) {
+            performanceManager.recordBookAdded(currentEmployee.getUsername());
+        }
+    }
+
+    public void recordBookEdited() {
+        if (currentEmployee != null) {
+            performanceManager.recordBookEdited(currentEmployee.getUsername());
+        }
+    }
+
+    public void recordBookBorrowed() {
+        if (currentEmployee != null) {
+            performanceManager.recordBookBorrowed(currentEmployee.getUsername());
+        }
+    }
+    public void recordBookReturned() {
+        if (currentEmployee != null) {
+            performanceManager.recordBookReturned(currentEmployee.getUsername());
+        }
+    }
+
+    public void recordBorrowRequestApproved() {
+        if (currentEmployee != null) {
+            performanceManager.recordBorrowRequestApproved(currentEmployee.getUsername());
+        }
+    }
+
+    public void recordBorrowRequestRejected() {
+        if (currentEmployee != null) {
+            performanceManager.recordBorrowRequestRejected(currentEmployee.getUsername());
+        }
+    }
+    public void displayEmployeePerformance() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view performance reports.");
+            return;
+        }
+
+        performanceManager.displayEmployeePerformance(currentEmployee.getUsername());
+    }
+
+    public void displayAllEmployeesPerformance() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view performance reports.");
+            return;
+        }
+        performanceManager.displayAllEmployeesPerformance();
+    }
+
+    public void displayTopPerformers() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view performance reports.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter number of top performers to display: ");
+        int limit = scanner.nextInt();
+        scanner.nextLine();
+
+        performanceManager.displayTopPerformers(limit);
+    }
+    public void displayMyPerformance() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view their performance.");
+            return;
+        }
+
+        performanceManager.displayEmployeePerformance(currentEmployee.getUsername());
     }
     public void toggleStudentStatus() {
         if (currentEmployee == null) {
@@ -194,6 +268,7 @@ public class LibrarySystem {
 
         if (borrowManager.markBookAsPickedUp(username, isbn)) {
             System.out.println("Book marked as picked up successfully!");
+            recordBookBorrowed();
         }else {
             System.out.println("Failed to mark book as picked up. Record not found or not ready for pickup.");
         }
@@ -260,6 +335,10 @@ public class LibrarySystem {
     }
 
     public StudentManager getStudentManager() { return studentManager; }
+    public EmployeePerformanceManager getPerformanceManager() {
+        return performanceManager;
+    }
+
     public BookManager getBookManager() { return bookManager; }
     public BorrowManager getBorrowManager() { return borrowManager; }
     public BorrowRequestManager getBorrowRequestManager() { return borrowRequestManager; }
@@ -301,6 +380,7 @@ public class LibrarySystem {
             System.out.println("Borrow request approved successfully!");
             bookManager.borrowBook(isbn);
             borrowManager.borrowBook(username, isbn, 14);
+            recordBorrowRequestApproved();
             System.out.println("Book has been marked as borrowed. Student can now pick up the book.");
         } else {
             System.out.println("Failed to approve request. Request not found or already processed.");
@@ -327,6 +407,7 @@ public class LibrarySystem {
 
         if (borrowRequestManager.rejectRequest(username, isbn, reason)) {
             System.out.println("Borrow request rejected successfully!");
+            recordBorrowRequestRejected();
         } else {
             System.out.println("Failed to reject request. Request not found or already processed.");
         }
@@ -385,6 +466,7 @@ public class LibrarySystem {
         String isbn = scanner.nextLine();
 
         bookManager.editBookFromInput(scanner, isbn);
+        recordBookEdited();
     }
 
     public void addNewBook() {
@@ -398,6 +480,7 @@ public class LibrarySystem {
 
         if (newBook != null) {
             bookManager.addNewBook(newBook);
+            recordBookAdded();
         }
     }
 
