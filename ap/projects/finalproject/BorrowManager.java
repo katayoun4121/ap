@@ -17,6 +17,61 @@ public class BorrowManager {
         }
     }
 
+    public BorrowStatistics generateBorrowStatistics(List<BorrowRequest> borrowRequests) {
+        return new BorrowStatistics(borrowRecords, borrowRequests);
+    }
+
+    public void displayMonthlyBorrowStatistics() {
+        System.out.println("\n=== Monthly Borrow Statistics ===");
+
+        borrowRecords.stream()
+                .collect(Collectors.groupingBy(
+                        record -> record.getBorrowDate().getMonth().toString() + " " + record.getBorrowDate().getYear(),
+                        Collectors.counting()
+                ))
+                .forEach((month, count) -> System.out.println(month + ": " + count + " borrows"));
+    }
+
+    public void displayMostBorrowedBooks(int limit) {
+        List<String> mostBorrowed = borrowRecords.stream()
+                .collect(Collectors.groupingBy(BorrowRecord::getBookIsbn, Collectors.counting()))
+                .entrySet().stream()
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(limit)
+                .map(entry -> "ISBN: " + entry.getKey() + " - Times Borrowed: " + entry.getValue())
+                .collect(Collectors.toList());
+
+        System.out.println("\n=== Most Borrowed Books (Top " + limit + ") ===");
+        if (mostBorrowed.isEmpty()) {
+            System.out.println("No borrow records found.");
+            return;
+        }
+
+        for (int i = 0; i < mostBorrowed.size(); i++) {
+            System.out.println((i + 1) + ". " + mostBorrowed.get(i));
+        }
+    }
+
+    public void displayMostActiveStudents(int limit) {
+        List<String> mostActive = borrowRecords.stream()
+                .collect(Collectors.groupingBy(BorrowRecord::getStudentUsername, Collectors.counting()))
+                .entrySet().stream()
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .limit(limit)
+                .map(entry -> "Student: " + entry.getKey() + " - Total Borrows: " + entry.getValue())
+                .collect(Collectors.toList());
+
+        System.out.println("\n=== Most Active Students (Top " + limit + ") ===");
+        if (mostActive.isEmpty()) {
+            System.out.println("No borrow records found.");
+            return;
+        }
+
+        for (int i = 0; i < mostActive.size(); i++) {
+            System.out.println((i + 1) + ". " + mostActive.get(i));
+        }
+    }
+
     public boolean markBookAsPickedUp(String studentUsername, String bookIsbn) {
         BorrowRecord record = findReadyForPickupRecord(studentUsername, bookIsbn);
         if (record != null) {

@@ -29,6 +29,30 @@ public class LibrarySystem {
         this.menuHandler = new MenuHandler(this);
         this.currentEmployee = null;
     }
+
+    public void displayMonthlyBorrowStatistics() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view monthly statistics.");
+            return;
+        }
+
+        borrowManager.displayMonthlyBorrowStatistics();
+    }
+    public void displayMostBorrowedBooks() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view most borrowed books.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter number of top books to display: ");
+        int limit = scanner.nextInt();
+        scanner.nextLine();
+
+        borrowManager.displayMostBorrowedBooks(limit);
+    }
+
+
     public void displayStudentStatistics() {
         if (currentEmployee == null) {
             System.out.println("Only employees can view student statistics.");
