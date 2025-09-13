@@ -29,6 +29,58 @@ public class LibrarySystem {
         this.menuHandler = new MenuHandler(this);
         this.currentEmployee = null;
     }
+    public void displayStudentStatistics() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view student statistics.");
+            return;
+        }
+
+        StudentStatistics statistics = studentManager.generateStudentStatistics(
+                borrowManager.getAllBorrows()
+        );
+        statistics.displayStatistics();
+    }
+    public void displayStudentsWithMostOverdue() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view overdue statistics.");
+            return;
+        }
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter number of top students to display: ");
+        int limit = scanner.nextInt();
+        scanner.nextLine();
+
+        studentManager.displayStudentsWithMostOverdue(limit, borrowManager.getAllBorrows());
+    }
+
+    public void displayStudentsWithOverdueBooks() {
+        if (currentEmployee == null) {
+            System.out.println("Only employees can view this information.");
+            return;
+        }
+
+        List<String> studentsWithOverdue = borrowManager.getStudentsWithOverdueBorrows();
+
+        System.out.println("\n=== Students with Overdue Books ===");
+        if (studentsWithOverdue.isEmpty()) {
+            System.out.println("No students have overdue books.");
+            return;
+        }
+
+        System.out.println("Total students with overdue books: " + studentsWithOverdue.size());
+        System.out.println("\nList of students:");
+        studentsWithOverdue.forEach(student -> {
+            List<BorrowRecord> overdueBooks = borrowManager.getStudentBorrows(student).stream()
+                    .filter(BorrowRecord::isOverdue)
+                    .collect(Collectors.toList());
+
+            System.out.println("Student: " + student + " - Overdue books: " + overdueBooks.size());
+            overdueBooks.forEach(record ->
+                    System.out.println("  - " + record.getBookIsbn() + " (Due: " + record.getDueDate() + ")")
+            );
+        });
+    }
     public void recordBookAdded() {
         if (currentEmployee != null) {
             performanceManager.recordBookAdded(currentEmployee.getUsername());

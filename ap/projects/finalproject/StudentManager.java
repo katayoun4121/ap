@@ -3,6 +3,7 @@ package ap.projects.finalproject;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StudentManager {
     private List<Student> students;
@@ -14,6 +15,75 @@ public class StudentManager {
 
         if (this.students == null) {
             this.students = new ArrayList<>();
+        }
+    }
+
+    public StudentStatistics generateStudentStatistics(List<BorrowRecord> borrowRecords) {
+        return new StudentStatistics(students, borrowRecords);
+    }
+
+    public List<String> getStudentsWithMostOverdue(int limit) {
+        return students.stream()
+                .filter(student -> student.isActive())
+                .map(student -> {
+                    long overdueCount = getOverdueBorrowCount(student.getUsername());
+                    return new StudentOverdueInfo(student, overdueCount);
+                })
+                .filter(info -> info.getOverdueCount() > 0)
+                .sorted((i1, i2) -> Long.compare(i2.getOverdueCount(), i1.getOverdueCount()))
+                .limit(limit)
+                .map(StudentOverdueInfo::toString)
+                .collect(Collectors.toList());
+    }
+
+    private long getOverdueBorrowCount(String username) {
+        return (long) (Math.random() * 10);
+    }
+
+    public void displayStudentsWithMostOverdue(int limit, List<BorrowRecord> borrowRecords) {
+        List<String> topOverdueStudents = students.stream()
+                .filter(Student::isActive)
+                .map(student -> {
+                    long overdueCount = borrowRecords.stream()
+                            .filter(record -> record.getStudentUsername().equals(student.getUsername()) &&
+                                    record.isOverdue())
+                            .count();
+                    return new StudentOverdueInfo(student, overdueCount);
+                })
+                .filter(info -> info.getOverdueCount() > 0)
+                .sorted((i1, i2) -> Long.compare(i2.getOverdueCount(), i1.getOverdueCount()))
+                .limit(limit)
+                .map(StudentOverdueInfo::toString)
+                .collect(Collectors.toList());
+
+        System.out.println("\n=== Top " + limit + " Students with Most Overdue Books ===");
+        if (topOverdueStudents.isEmpty()) {
+            System.out.println("No students with overdue books.");
+            return;
+        }
+
+        for (int i = 0; i < topOverdueStudents.size(); i++) {
+            System.out.println((i + 1) + ". " + topOverdueStudents.get(i));
+        }
+    }
+
+    private static class StudentOverdueInfo {
+        private Student student;
+        private long overdueCount;
+
+        public StudentOverdueInfo(Student student, long overdueCount) {
+            this.student = student;
+            this.overdueCount = overdueCount;
+        }
+
+        public long getOverdueCount() {
+            return overdueCount;
+        }
+
+        @Override
+        public String toString() {
+            return student.getName() + " (" + student.getUsername() + ") - " +
+                    overdueCount + " overdue books";
         }
     }
 
